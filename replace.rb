@@ -17,7 +17,7 @@ class Replace
 
     files.each do |file_name|
 
-      create_backup
+      create_backup(file_name)
       text = File.read(file_name)
       replace = text.gsub(@original, @replacement)
       File.open(file_name, 'w') { |file| file.puts replace }
@@ -26,7 +26,7 @@ class Replace
   end
 
   # If answered yes create backup
-  def create_backup
+  def create_backup(file_name)
     if @backup == 'y' || @backup == 'yes'
       new_file = file_name + '.bak'
       FileUtils.cp file_name, new_file
