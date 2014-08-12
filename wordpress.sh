@@ -1,5 +1,5 @@
 # Script to grab and download the latest version of WordPress and extract it
-# to the current directory.
+# to the current directory. Then set up dynamic base theme.
 
 echo "Is this a VIP install?";
 read vip
@@ -15,5 +15,14 @@ else
 	tar -xvf wordpress.tar.gz
 	mv wordpress $name
 	rm wordpress.tar.gz
-	cd $name
+	cd $name/wp-content/themes
+
+	echo "\Would you like to setup the braces dynamic base theme?";
+	read base_theme
+
+	if [ "$base_theme" = "yes" ] || [ "$base_theme" = "y" ]; then
+		git clone git@github.com:oomphinc/braces-theme-generator.git $name
+		cd $name
+		ruby builder.rb
+	fi
 fi
