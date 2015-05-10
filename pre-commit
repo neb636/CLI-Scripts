@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+
+# Lets not commit things that still have merge conflicts
+
+`git diff-index --name-status HEAD`.split("\n").each do |status_with_filename|
+  
+  status, filename = status_with_filename.split(/\s+/)
+
+  next if status == 'D'
+
+  File.open(filename) do |file|
+    while line = file.gets
+
+      if line.include?("<<<<<<<") || line.include?(">>>>>>>")
+        puts "ERROR: #{filename} is conflict"
+        exit(1)
+      end
+    end
+  end
+end
